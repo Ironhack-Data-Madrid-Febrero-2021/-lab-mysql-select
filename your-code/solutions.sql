@@ -76,7 +76,7 @@ LIMIT 3;
 -- CHALLENGE 4
 
 SELECT authors.au_id AS `AUTHOR ID`, authors.au_lname AS `LAST NAME`, 
-authors.au_fname AS `FIRST NAME`, SUM(sales.qty) AS `TOTAL`, IFNULL(`TOTAL`,0)
+authors.au_fname AS `FIRST NAME`, IFNULL(SUM(sales.qty), 0) AS `TOTAL`
 
 FROM 
 	`titles`
@@ -93,10 +93,11 @@ FROM
     ON
     authors.au_id=titleauthor.au_id
 
-
 GROUP BY `AUTHOR ID`, `FIRST NAME`, `LAST NAME`
 ORDER BY `TOTAL`DESC;
 
+-- BONUS
+SELECT * FROM titles
 
 
 
