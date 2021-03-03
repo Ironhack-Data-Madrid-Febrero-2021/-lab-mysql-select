@@ -4,20 +4,75 @@ SELECT * FROM `lab-publications-mysql`.titles;
 SELECT * FROM `lab-publications-mysql`.publishers;
 
 
+
 USE `lab-publications-mysql`;
-
--- CHALLENGE 1 
-
-		SELECT `authors`.`au_id`AS `AUTHOR ID`, `au_lname`AS `LAST NAME`, `au_fname` AS `FIRST NAME`
+SELECT `authors`.`au_id`AS `AUTHOR ID`, `au_lname`AS `LAST NAME`, `au_fname` AS `FIRST NAME`, TITLES.title AS `TITLE`,`pub_name` AS `PUBLISHERS`
 			FROM `authors`
 					JOIN  `titleauthor` AS `TITLE AUTHOR` 
 							ON  `authors`.`au_id` = `TITLE AUTHOR`.`au_id`
 					JOIN `titles` AS `TITLES` 
 							ON  `TITLE AUTHOR`.`title_id` = `TITLES`.`title_id`
 					JOIN  `publishers` AS `PUBLISHER` 	
-							ON  `PUBLISHER`.`pub_id` = `titles`.`pub_id`;
-			
-    
-						
+							ON  `PUBLISHER`.`pub_id` = `titles`.`pub_id`
+ORDER BY `AUTHOR ID`;
     
     
+    
+-- CHALLENGE 2
+
+USE `lab-publications-mysql`; 
+
+SELECT `authors`.`au_id` AS `AUTHOR ID`, `au_lname` AS `LAST NAME`, `au_fname` AS `FIRST NAME`, `pub_name` AS ` PUBLISHER`, 
+COUNT(`pub_name`) AS `TITLE COUNT`   
+
+	FROM `authors`
+		JOIN `titleauthor` AS `ta`    ON `ta`.`au_id` = `authors`.`au_id`
+		JOIN `titles`                  ON `titles`.`title_id` = `ta`.`title_id`
+		JOIN `publishers` AS `p`       ON `p`.`pub_id` = `titles`.`pub_id`
+        
+	GROUP BY `titles`.`title_id`
+    ORDER BY `AUTHOR ID` DESC;
+    
+    
+-- select  `AUTHOR ID`, sum(`TITLE COUNT`) FROM `authors`    GROUP BY `AUTHOR ID`;						
+    
+
+
+
+-- CHALLENGE 3
+
+SELECT `authors`.`au_id` AS ` AUTHOR_ID`, `au_lname` AS `LAST NAME`, `au_fname` AS `FIRTS NAME`, SUM(`qty`) AS `TOTAL`
+	FROM `authors` 
+		JOIN `titleauthor` AS `TA`      ON  `TA`.au_id = `authors`.`au_id`
+        JOIN `titles` AS T              ON   `T`.`title_id` = `TA`.`title_id`
+        JOIN `sales`                    ON   `sales`.`title_id` = `T`.`title_id`
+        
+	GROUP BY  `qty`
+    ORDER BY `total` DESC
+    LIMIT 3;
+ 
+ 
+ 
+ -- CHALLENGE 4
+ 
+  SELECT `authors`.`au_id` AS ` AUTHOR_ID`, `au_lname` AS `LAST NAME`, `au_fname` AS `FIRTS NAME`, IFNULL(SUM(`qty`), 0) AS `TOTAL`
+	FROM `authors` 
+		LEFT JOIN `titleauthor` AS `TA`       ON  `TA`.au_id = `authors`.`au_id`
+        LEFT JOIN  `titles` AS T              ON   `T`.`title_id` = `TA`.`title_id`
+        LEFT JOIN  `sales`                    ON   `sales`.`title_id` = `T`.`title_id`
+        
+	GROUP BY  authors.au_id
+    ORDER BY `total` DESC;
+ 
+ 
+ -- BONUS
+ 
+ 
+ SELECT  authors.au_id AS `AUTHOR ID`, au_lname AS `LAST NAME`, au_fname AS `FIRST NAME`, (advance + royalty)  AS PROFIT
+	FROM authors 
+		JOIN titleauthor AS TA           ON    authors.au_id = TA.au_id
+        JOIN titles AS T                 ON    T.title_id = TA.title_id
+        
+	GROUP BY authors.au_id
+    ORDER BY PROFIT DESC;
+ 
