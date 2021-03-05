@@ -99,7 +99,7 @@ ORDER BY `TOTAL`DESC;
 -- BONUS
 
 SELECT authors.au_id AS `AUTHOR ID`, authors.au_lname AS `LAST NAME`, 
-authors.au_fname AS `FIRST NAME`, SUM(sales.qty*titles.price*titleauthor.royaltyper) AS `PROFIT`
+authors.au_fname AS `FIRST NAME`, SUM((sales.qty*titles.price*titleauthor.royaltyper)+(titles.advance*titleauthor.royaltyper)) AS `PROFIT`
 
 FROM 
 	`titles`
