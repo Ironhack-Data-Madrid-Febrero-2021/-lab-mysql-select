@@ -23,14 +23,14 @@ ORDER BY `AUTHOR ID`;
 USE `lab-publications-mysql`; 
 
 SELECT `authors`.`au_id` AS `AUTHOR ID`, `au_lname` AS `LAST NAME`, `au_fname` AS `FIRST NAME`, `pub_name` AS ` PUBLISHER`, 
-COUNT(`pub_name`) AS `TITLE COUNT`   
+COUNT(`titles`.`title_id`) AS `TITLE COUNT`   
 
 	FROM `authors`
 		JOIN `titleauthor` AS `ta`    ON `ta`.`au_id` = `authors`.`au_id`
 		JOIN `titles`                  ON `titles`.`title_id` = `ta`.`title_id`
 		JOIN `publishers` AS `p`       ON `p`.`pub_id` = `titles`.`pub_id`
         
-	GROUP BY `titles`.`title_id`
+	GROUP BY `p`.`pub_id`, `AUTHOR ID`
     ORDER BY `AUTHOR ID` DESC;
     
     
@@ -73,6 +73,8 @@ SELECT `authors`.`au_id` AS ` AUTHOR_ID`, `au_lname` AS `LAST NAME`, `au_fname` 
 		JOIN titleauthor AS TA           ON    authors.au_id = TA.au_id
         JOIN titles AS T                 ON    T.title_id = TA.title_id
         
-	GROUP BY authors.au_id
     ORDER BY PROFIT DESC;
  
+-- Lo intenté de varias formas posibles pero me daban error te dejo la más probable y la que me dió un resultado posible, 
+-- posible porque no me dió la cabeza para llegar a comprobarla, tal cual Excel buscas un "total suma" y compruebas el total de tu columna
+-- que ya me hago una idea pero me toca probar. En realidad salgo muy contenta de este lab porque SQL y yo ya nos vamos llevando bien.   
