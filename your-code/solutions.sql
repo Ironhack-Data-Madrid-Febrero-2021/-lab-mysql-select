@@ -97,7 +97,27 @@ GROUP BY `AUTHOR ID`, `FIRST NAME`, `LAST NAME`
 ORDER BY `TOTAL`DESC;
 
 -- BONUS
-SELECT * FROM titles
 
+SELECT authors.au_id AS `AUTHOR ID`, authors.au_lname AS `LAST NAME`, 
+authors.au_fname AS `FIRST NAME`, SUM(sales.qty*titles.price*titleauthor.royaltyper) AS `PROFIT`
+
+FROM 
+	`titles`
+    JOIN
+    `sales`
+    ON 
+    sales.title_id=titles.title_id
+    JOIN 
+    `titleauthor`
+	ON
+    titles.title_id=titleauthor.title_id
+    RIGHT JOIN
+    `authors`
+    ON
+    authors.au_id=titleauthor.au_id
+
+GROUP BY `AUTHOR ID`, `FIRST NAME`, `LAST NAME`
+ORDER BY `PROFIT`DESC
+LIMIT 3; 
 
 
